@@ -15,13 +15,13 @@ const config  = new DocumentBuilder()
 
 const swagger = SwaggerModule.createDocument(app,config);
 
-// setup swagger với đường dẫn là /swagger
+
 //local
 //SwaggerModule.setup("swagger",app,swagger)
 
 //vps
 app.setGlobalPrefix('tps'); 
-SwaggerModule.setup('swagger', app, swagger);
+SwaggerModule.setup('tps/swagger', app, swagger);
 
 
 
