@@ -23,7 +23,7 @@ const swagger = SwaggerModule.createDocument(app,config);
 
 //vps
 
-SwaggerModule.setup('tps/swagger', app, swagger);
+SwaggerModule.setup('swagger', app, swagger);
 
 
 
