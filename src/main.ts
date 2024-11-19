@@ -20,11 +20,12 @@ const swagger = SwaggerModule.createDocument(app,config);
 //SwaggerModule.setup("swagger",app,swagger)
 
 //vps
-SwaggerModule.setup('tps/swagger', app, swagger);
+app.setGlobalPrefix('tps'); 
+SwaggerModule.setup('swagger', app, swagger);
 
 
 
-//app.setGlobalPrefix('api'); 
+
 
 app.enableCors();
   await app.listen(8083);
