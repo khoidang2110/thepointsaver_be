@@ -3,7 +3,7 @@ name: Deploy Nodejs to VPS Docker
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
