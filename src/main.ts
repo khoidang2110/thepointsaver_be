@@ -16,12 +16,15 @@ const config  = new DocumentBuilder()
 const swagger = SwaggerModule.createDocument(app,config);
 
 // setup swagger với đường dẫn là /swagger
-SwaggerModule.setup("swagger",app,swagger)
-//SwaggerModule.setup('api/swagger', app, swagger);
+//local
+//SwaggerModule.setup("swagger",app,swagger)
+
+//vps
+SwaggerModule.setup('tps/swagger', app, swagger);
+
+
+
 //app.setGlobalPrefix('api'); 
-
-
-
 
 app.enableCors();
   await app.listen(8083);
