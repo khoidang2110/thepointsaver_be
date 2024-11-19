@@ -1,0 +1,48 @@
+name: Deploy Nodejs to VPS Docker
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image for Backend
+      run: docker build -t tps_be .
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+    - name: Deploy back end to VPS
+      env:
+        VPS_IP: ${{ secrets.VPS_IP }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        PAT: ${{ secrets.PAT }} 
+      run: |
+        # SSH into VPS to extract and deploy
+        ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
+          cd /home/$VPS_USER
+         # Clone the private repository using the PAT
+          git clone https://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@github.com/khoidang2110/thepointsaver_be.git tps_be || (cd tps_be && git pull)
+          cd tps_be || exit
+          docker stop tps_nest || true
+          docker rm tps_nest || true
+          docker rmi -f tps_be || true  
+          docker build -t tps_be .
+          # docker - d chạy nodejs ngầm ko chạy lên terminal
+          docker run --restart=always -d -p 8083:8083 --name tps_nest tps_be
+           # Clean up by removing the cloned repository files
+          cd ..
+          rm -rf tps_be
+        EOF
