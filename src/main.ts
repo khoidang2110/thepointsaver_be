@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
 
-  app.setGlobalPrefix('tps'); 
+
 const config  = new DocumentBuilder()
 
 .setTitle("The point saver API")
@@ -17,11 +17,6 @@ const config  = new DocumentBuilder()
 
 const swagger = SwaggerModule.createDocument(app,config);
 
-
-//local
-//SwaggerModule.setup("swagger",app,swagger)
-
-//vps
 
 SwaggerModule.setup('swagger', app, swagger);
 
