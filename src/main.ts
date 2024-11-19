@@ -5,6 +5,8 @@ import * as multer from 'multer';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+
+  app.setGlobalPrefix('tps'); 
 const config  = new DocumentBuilder()
 
 .setTitle("The point saver API")
@@ -20,7 +22,7 @@ const swagger = SwaggerModule.createDocument(app,config);
 //SwaggerModule.setup("swagger",app,swagger)
 
 //vps
-app.setGlobalPrefix('tps'); 
+
 SwaggerModule.setup('tps/swagger', app, swagger);
 
 
