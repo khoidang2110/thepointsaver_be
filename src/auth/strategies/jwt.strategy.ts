@@ -14,8 +14,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         return req.headers['auth_token'] || null;
       },
       ignoreExpiration: false,
-      //secretOrKey: config.get('SECRET_KEY'),
-      secretOrKey: "khoidang"
+      secretOrKey: config.get('SECRET_KEY'),
+      //secretOrKey: "khoidang"
     });
   }
 

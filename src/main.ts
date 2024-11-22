@@ -17,11 +17,16 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, swagger);
 
   app.enableCors({
-    origin: ['https://thepointsaver.vercel.app/', 'http://localhost:3000'], // Địa chỉ client frontend của bạn
+    origin: [
+      'https://thepointsaver.vercel.app', // Cấu hình cho frontend của bạn
+      'http://localhost:3000', // Cấu hình cho localhost (nếu bạn phát triển local)
+      'https://api.easybadwork.com', // Thêm domain API của bạn
+    ],
     methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization', // Chắc chắn cho phép Authorization header
+    allowedHeaders: 'Content-Type,Authorization', // Đảm bảo cho phép Authorization header
+    credentials: true, // Cho phép gửi cookies (nếu có)
   });
-  
+
   await app.listen(8083);
 }
 bootstrap();
