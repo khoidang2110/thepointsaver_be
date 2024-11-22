@@ -9,27 +9,29 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
 
-    // CORS
-    const allowedOrigins = [
-      'https://thepointsaver.vercel.app/',
-      'http://localhost:3000',
+    // // CORS
+    // const allowedOrigins = [
+    //   'https://thepointsaver.vercel.app/',
+    //   'http://localhost:3000',
     
-    ];
+    // ];
   
-    const corsOptions = {
-      origin: (origin, callback) => {
-        if (allowedOrigins.includes(origin) || !origin) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: true,
-    };
+    // const corsOptions = {
+    //   origin: (origin, callback) => {
+    //     if (allowedOrigins.includes(origin) || !origin) {
+    //       callback(null, true);
+    //     } else {
+    //       callback(new Error('Not allowed by CORS'));
+    //     }
+    //   },
+    //   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    //   allowedHeaders: ['Content-Type', 'Authorization'],
+    //   credentials: true,
+    // };
   
-    app.use(cors(corsOptions)); // Sử dụng CORS với cấu hình
+    // app.use(cors(corsOptions)); // Sử dụng CORS với cấu hình
+
+
 const config  = new DocumentBuilder()
 
 .setTitle("The point saver API")
