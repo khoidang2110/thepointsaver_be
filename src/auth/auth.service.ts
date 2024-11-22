@@ -28,6 +28,7 @@ export class AuthService {
           // Trả về lỗi 400 nếu user không tồn tại
           console.log('case no mail')
           throw new HttpException('User does not exist', HttpStatus.BAD_REQUEST);
+          
         }
     
         // Nếu user tồn tại trong DB => kiểm tra password
