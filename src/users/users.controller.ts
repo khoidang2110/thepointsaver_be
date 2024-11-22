@@ -1,12 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query,Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query,Res, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiHeader, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { RoleGuard } from 'src/auth/guards/role.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { request } from 'https';
 
-@UseGuards(AuthGuard("jwt"))
+
 @ApiTags("USER") // gom nhóm
+@ApiBearerAuth() // Yêu cầu Bearer Token trong Swagger
+@ApiHeader({
+  name: 'auth_token',
+  description: 'Token xác thực của người dùng',
+  required: true,
+  schema: {
+    type: 'string',
+  },
+})
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -40,8 +52,12 @@ export class UsersController {
 
 
   @Post('/get-user-info')
-  @ApiQuery({ name: 'token', type: 'string', required: false, description: 'Token of the user' })
-  async getUserInfo(@Query('token') token: string) {
-    return this.usersService.getUserInfo(token);
+   @UseGuards(AuthGuard('jwt'),RoleGuard)
+   @Roles('admin', 'user')  
+   async getUserInfo(@Req() req) {
+    const user = req.user; // Thông tin từ JwtStrategy
+    return this.usersService.getUserInfo(user.user_id);
   } 
+
+  
 }

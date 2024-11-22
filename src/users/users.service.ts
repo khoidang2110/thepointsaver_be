@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaClient } from '@prisma/client';
@@ -36,38 +36,35 @@ export class UsersService {
   }
 
 
-        async getUserInfo(token: string): Promise<any> {
-          try {
-            // Get the secret key from the config service
-            const secretKey = this.configService.get("SECRET_KEY");
-        
-            // Verify the token and decode it
-            const decoded = await this.jwtService.verifyAsync(token, {
-              secret: secretKey, // Ensure secret key is provided
-            });
-        
-            // Extract user information from the decoded token
-            const { user_id, user_name, phone, email } = decoded;
-        
-            // Return the user information directly from the token payload
-            return {
-              statusCode: 200,
-              data: {
-                user_id,
-                user_name,
-                phone,
-                email,
-              },
-            };
-          } catch (err) {
-            // Handle invalid or expired token
-            return {
-              statusCode: 401,
-              message: 'Invalid or expired token',
-              error: err.message,
-            };
-          }
-        }
+  async getUserInfo(userId: number): Promise<any> {
+    // Tìm người dùng trong cơ sở dữ liệu
+    const user = await this.prismaService.users.findUnique({
+      where: { user_id: userId },
+      select: {
+        user_id: true,
+        user_name: true,
+        email: true,
+        phone: true,
+        //roles: true, // Chỉ định các trường bạn muốn lấy
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Trả về thông tin người dùng
+    return {
+      statusCode: 200,
+      data: {
+        user_id: user.user_id,
+        user_name: user.user_name,
+        email: user.email,
+        phone: user.phone,
+        //roles: user.roles,
+      },
+    };
+  }
 
 
 }

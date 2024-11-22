@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -14,41 +14,55 @@ export class AuthService {
         //private prismaService: PrismaService,
         private configService:ConfigService
     ){}
-    async login(email, password): Promise<any> {
-        //B1: kiểm tra email có tồn tại trong DB hay không
-        let checkUser = await this.prismaService.users.findFirst({
+
+    async login(email: string, password: string): Promise<any> {
+      try {
+        // B1: Kiểm tra email có tồn tại trong DB hay không
+        const checkUser = await this.prismaService.users.findFirst({
           where: {
             email: email,
           },
         });
-        if (checkUser) {
-          // nếu user tồn tại trong DB => check password ( bcrypt)
-          // npm i bcrypt @types/bcrypt
-          //ss 2 pass
-          let isCorrectPass = bcrypt.compareSync(password, checkUser.password);
-          if (isCorrectPass) {
-            let payload = {
-              user_id: checkUser.user_id,
-              user_name: checkUser.user_name,
-              email: checkUser.email,
-              phone: checkUser.phone,
-              password: checkUser.password,
-              user_role: checkUser.user_role,
-            };
-            // nếu password matching => tạo token
-            let token = this.jwtService.sign(payload, {
-              secret: this.configService.get('SECRET_KEY'),
-              expiresIn: this.configService.get('EXPIRES_IN'),
-              //expiresIn: Number(this.configService.get('EXPIRES_IN')),
-            });
-            return token;
-            //nếu không => raise lỗi
-          }
-          return 'password incorrect ';
+    
+        if (!checkUser) {
+          // Trả về lỗi 400 nếu user không tồn tại
+          console.log('case no mail')
+          throw new HttpException('User does not exist', HttpStatus.BAD_REQUEST);
         }
     
-        return 'User is not exist';
+        // Nếu user tồn tại trong DB => kiểm tra password
+        const isCorrectPass = bcrypt.compareSync(password, checkUser.password);
+    
+        if (!isCorrectPass) {
+          // Trả về lỗi 401 nếu password không khớp
+          throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
+        }
+    
+        // Nếu password khớp => tạo token
+        const payload = {
+          user_id: checkUser.user_id,
+          user_name: checkUser.user_name,
+          email: checkUser.email,
+          phone: checkUser.phone,
+          user_role: checkUser.user_role,
+          is_blocked: checkUser.is_blocked,
+        };
+    
+        const token = this.jwtService.sign(payload, {
+          secret: this.configService.get('SECRET_KEY'),
+          expiresIn: this.configService.get('EXPIRES_IN'),
+        });
+    
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'Login successful',
+          data: { token },
+        };
+      } catch (error) {
+        // Bắt tất cả lỗi khác nếu có
+        throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
       }
+    }
     
       async signUp(body: CreateUserDto): Promise<any> {
         function getRandomInt(min, max) {
@@ -86,7 +100,7 @@ export class AuthService {
               ...body,
               password: hashedPassword,
               user_role: 'user',
-              user_id: getRandomInt(1, 100),
+              user_id: getRandomInt(1, 10000),
             },
           });
           return {

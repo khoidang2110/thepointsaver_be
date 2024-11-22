@@ -37,11 +37,17 @@ model users {
   user_name  String    @db.VarChar(255)
   email      String    @unique @db.VarChar(255)
   phone      String    @db.VarChar(255)
+  address    String    @db.VarChar(255)
+  city       String    @db.VarChar(255)
+  state      String    @db.VarChar(255)
+  zip        Int?
+  country    String    @db.VarChar(255)
   password   String    @db.VarChar(255)
   rating     Int?
   avatar_url String?   @db.VarChar(255)
   user_role  String?   @db.VarChar(255)
   created_at DateTime? @default(now()) @db.Timestamp(6)
   updated_at DateTime? @default(now()) @db.Timestamp(6)
+  is_blocked Boolean?  @default(false)
   is_deleted Boolean?  @default(false)
 }

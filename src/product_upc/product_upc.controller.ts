@@ -3,7 +3,8 @@ import { ProductUpcService } from './product_upc.service';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { RoleGuard } from 'src/auth/guards/role.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @ApiTags('Product-upc')
 @ApiBearerAuth() // Yêu cầu Bearer Token trong Swagger
@@ -18,11 +19,12 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 @Controller('product-upc')
 export class ProductUpcController {
   constructor(
-    private readonly productUpcService: ProductUpcService,
-    private cloudinarySerivce:CloudinaryService) {}
+    private readonly productUpcService: ProductUpcService
+    ) {}
 
   @Get()
-  @UseGuards(AuthGuard('jwt')) // Bảo vệ bằng JWT, là khi nhập token vào thì check xem còn hạn không
+  @UseGuards(AuthGuard('jwt'),RoleGuard)
+  @Roles('admin', 'user')  // Bảo vệ bằng JWT, là khi nhập token vào thì check xem còn hạn không
   async getAllProductUpcs() {
     return await this.productUpcService.findAll();
   }
@@ -60,11 +62,11 @@ export class ProductUpcController {
     };
   }
 
-  @Post('/upload')
-  @UseInterceptors(FileInterceptor('file'))
-  upladCloud(@UploadedFile() file: Express.Multer.File) {
-    return this.cloudinarySerivce.uploadImage(file);
-  }
+  // @Post('/upload')
+  // @UseInterceptors(FileInterceptor('file'))
+  // upladCloud(@UploadedFile() file: Express.Multer.File) {
+  //   return this.cloudinarySerivce.uploadImage(file);
+  // }
 
 }
 
