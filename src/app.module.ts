@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { ProductUpcModule } from './product_upc/product_upc.module';
+import { JwtStrategy } from './auth/strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { ProductUpcModule } from './product_upc/product_upc.module';
     
   ], // khai báo module đối tượng khác
   controllers: [AppController],  //  định nghĩa API (endpoint,method)
-  providers: [AppService], // địnhg nghĩa logic, tính toán
+  providers: [AppService,JwtStrategy], // địnhg nghĩa logic, tính toán
 })
 export class AppModule {}
