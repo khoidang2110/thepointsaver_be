@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(decodedToken: any) {
-   console.log(decodedToken); // In ra decoded token (lý tưởng là kiểm tra thông tin người dùng)
+   console.log("strategy",decodedToken); // In ra decoded token (lý tưởng là kiểm tra thông tin người dùng)
     return decodedToken;
   }
 }

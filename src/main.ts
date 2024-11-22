@@ -8,8 +8,9 @@ async function bootstrap() {
   const config = new DocumentBuilder()
 
     .setTitle('The point saver API')
-    .addBearerAuth()
+    
     .setVersion('1.0')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
     .build();
 
   const swagger = SwaggerModule.createDocument(app, config);
