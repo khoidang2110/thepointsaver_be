@@ -31,6 +31,12 @@ jobs:
         VPS_IP: ${{ secrets.VPS_IP }}
         VPS_USER: ${{ secrets.VPS_USER }}
         PASS: ${{ secrets.PASS }}
+        ECRET_KEY: ${{ secrets.SECRET_KEY }}
+        EXPIRES_IN: ${{ secrets.EXPIRES_IN }}
+        CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
+        CLOUD_API_KEY: ${{ secrets.CLOUD_API_KEY }}
+        CLOUD_API_SECRET: ${{ secrets.CLOUD_API_SECRET }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: |
         # SSH into VPS to extract and deploy
         sshpass -p $PASS ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
