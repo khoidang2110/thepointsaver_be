@@ -16,6 +16,9 @@ COPY . .
 # B4: Cài đặt các dependencies từ package.json
 RUN npm install
 
+# B4.1: Chạy npx prisma generate để tạo Prisma Client
+RUN npx prisma generate
+
 # B5: Build ứng dụng NestJS (nếu ứng dụng của bạn sử dụng TypeScript)
 RUN npm run build  
 
@@ -23,4 +26,4 @@ RUN npm run build
 EXPOSE 8083
 
 # B7: Start server trong Docker container
-CMD ["npm", "run", "start:prod"]  
+CMD ["npm", "run", "start:prod"]
