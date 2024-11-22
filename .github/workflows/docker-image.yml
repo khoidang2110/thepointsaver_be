@@ -25,12 +25,12 @@ jobs:
         VPS_IP: ${{ secrets.VPS_IP }}
         VPS_USER: ${{ secrets.VPS_USER }}
         PASS: ${{ secrets.PASS }}
-        DATABASE_URL: postgresql://postgres:1234@172.17.0.1:5432/thepointsaver
-        SECRET_KEY: khoidang
-        EXPIRES_IN: 3y
-        CLOUD_NAME: daa7olre0
-        CLOUD_API_KEY: 389784277328218
-        CLOUD_API_SECRET: _1fH8rpAELXQx6L_H0zB4ntxkeM
+        # DATABASE_URL: postgresql://postgres:1234@172.17.0.1:5432/thepointsaver
+        # SECRET_KEY: khoidang
+        # EXPIRES_IN: 3y
+        # CLOUD_NAME: daa7olre0
+        # CLOUD_API_KEY: 389784277328218
+        # CLOUD_API_SECRET: _1fH8rpAELXQx6L_H0zB4ntxkeM
         
       run: |
         # SSH into VPS to extract and deploy

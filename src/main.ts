@@ -21,6 +21,7 @@ async function bootstrap() {
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization', // Chắc chắn cho phép Authorization header
   });
+  
   await app.listen(8083);
 }
 bootstrap();
