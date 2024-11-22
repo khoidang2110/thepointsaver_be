@@ -17,7 +17,7 @@ COPY . .
 RUN npm install
 
 # B4.1: Chạy npx prisma generate để tạo Prisma Client
-RUN npx prisma generate
+#RUN npx prisma generate
 
 # B5: Build ứng dụng NestJS (nếu ứng dụng của bạn sử dụng TypeScript)
 RUN npm run build  
