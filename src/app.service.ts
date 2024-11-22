@@ -3,6 +3,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'thepointsaver be! 20/11';
+    return 'thepointsaver be! 22/11';
   }
 }
