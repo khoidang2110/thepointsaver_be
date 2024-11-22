@@ -23,6 +23,6 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
     
   ], // khai báo module đối tượng khác
   controllers: [AppController],  //  định nghĩa API (endpoint,method)
-  providers: [AppService,JwtStrategy], // địnhg nghĩa logic, tính toán
+  providers: [AppService], // địnhg nghĩa logic, tính toán
 })
 export class AppModule {}
