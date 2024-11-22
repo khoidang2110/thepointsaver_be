@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  nestjs:
+    build:
+      context: . # Thư mục chứa Dockerfile cho NestJS
+    container_name: tps-nest
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@14.225.218.217:5432/thepointsaver
+      - SECRET_KEY=khoidang
+      - EXPIRES_IN=3y
+      - CLOUD_NAME=daa7olre0
+      - CLOUD_API_KEY=389784277328218
+      - CLOUD_API_SECRET=_1fH8rpAELXQx6L_H0zB4ntxkeM
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=traefik'
+      - 'traefik.http.routers.nestjs.entrypoints=http'
+      - 'traefik.http.routers.nestjs.rule= Host(`api.thepointsaver.com`)'
+      - 'traefik.http.routers.nestjs-secure.entrypoints=https'
+      - 'traefik.http.routers.nestjs-secure.rule= Host(`api.thepointsaver.com`)'
+      - 'traefik.http.routers.nestjs-secure.tls.certresolver=letsencrypt'
+  
+    networks:
+      - traefik  # Kết nối container NestJS với network traefik
+
+
+networks:
+  traefik:
+    external: true  # Đảm bảo Traefik và các dịch vụ container sử dụng cùng network này
