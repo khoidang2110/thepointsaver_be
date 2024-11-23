@@ -34,10 +34,11 @@ jobs:
         
       run: |
         env
-        echo ${{ secrets.VPS_IP }}
+        
         # SSH into VPS to extract and deploy
         sshpass -p $PASS ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
           cd /home/$VPS_USER
+          echo ${{ secrets.VPS_IP }} >> tmpfile
          # Clone the private repository using the PAT
           git clone https://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@github.com/khoidang2110/thepointsaver_be.git tps_be || (cd tps_be && git pull)
           cd tps_be || exit
