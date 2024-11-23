@@ -12,6 +12,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        ref: main  # Clone nhánh "main"
+        fetch-depth: 1  # Chỉ clone commit mới nhất
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
