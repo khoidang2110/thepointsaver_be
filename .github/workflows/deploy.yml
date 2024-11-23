@@ -34,6 +34,7 @@ jobs:
         
       run: |
         env
+        echo ${{ secrets.VPS_IP }}
         # SSH into VPS to extract and deploy
         sshpass -p $PASS ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
           cd /home/$VPS_USER
@@ -45,7 +46,7 @@ jobs:
           docker rmi -f tps_be || true  
           docker build -t tps_be .
           # docker - d chạy nodejs ngầm ko chạy lên terminal
-          docker run --restart=always -d -p 8083:8083 --name tps_nest tps_be
+          docker run -e DATABASE_URL=$DATABASE_URL -e SECRET_KEY=$SECRET_KEY -e EXPIRES_IN=$EXPIRES_IN -e CLOUD_NAME=$CLOUD_NAME -e CLOUD_API_KEY=$CLOUD_API_KEY -e CLOUD_API_SECRET=$CLOUD_API_SECRET --restart=always -d -p 8083:8083 --name tps_nest tps_be
            # Clean up by removing the cloned repository files
           cd ..
           rm -rf tps_be
