@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+  labels:
+    app: node-app
+spec:
+  replicas: 1 # Number of Pods
+  selector:
+    matchLabels:
+      app: node-app
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+      - name: node-app
+        image: thepointsaver # Replace with your Node.js app image
+        ports:
+        - containerPort: 8083
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        command: ["npm", "run", "start:prod"] # Command to start the app
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: DATABASE_URL
+          value: "postgresql://postgres:1234@14.225.218.217:5432/thepointsaver"
+        - name: SECRET_KEY
+          value: "khoidang"
+        - name: EXPIRES_IN
+          value: "3y"
+        - name: CLOUD_NAME
+          value: "daa7olre0"
+        - name: CLOUD_API_KEY
+          value: "389784277328218"
+        - name: CLOUD_API_SECRET
+          value: "_1fH8rpAELXQx6L_H0zB4ntxkeM"
+
+        # Optional: Add readiness and liveness probes
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: 8083
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: "/"
+            port: 8083
+          initialDelaySeconds: 10
+          periodSeconds: 30

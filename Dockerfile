@@ -7,6 +7,8 @@ WORKDIR /app
 # B3: Copy các file package.json và package-lock.json
 COPY package*.json ./
 
+RUN npm install
+
 # B3.1: Copy thư mục prisma nếu bạn dùng Prisma
 COPY prisma ./prisma/
 
@@ -14,10 +16,10 @@ COPY prisma ./prisma/
 COPY . .
 
 # B4: Cài đặt các dependencies từ package.json
-RUN npm install
+
 
 # B4.1: Chạy npx prisma generate để tạo Prisma Client
-#RUN npx prisma generate
+RUN npx prisma generate
 
 # B5: Build ứng dụng NestJS (nếu ứng dụng của bạn sử dụng TypeScript)
 RUN npm run build  

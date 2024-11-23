@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { writeFileSync } from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +29,8 @@ async function bootstrap() {
     credentials: true, // Cho phép gửi cookies (nếu có)
   });
 
+    // Export Swagger JSON/YAML file
+  writeFileSync('./swagger.json', JSON.stringify(swagger, null, 2));
   await app.listen(8083);
 }
 bootstrap();
