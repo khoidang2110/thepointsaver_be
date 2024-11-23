@@ -1,0 +1,54 @@
+name: Deploy Nodejs to VPS Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    
+    - name: Install sshpass
+      run: sudo apt-get update && sudo apt-get install -y sshpass
+
+    - name: Deploy back end to VPS
+      env:
+        VPS_IP: ${{ secrets.VPS_IP }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        PASS: ${{ secrets.PASS }}
+        # DATABASE_URL: postgresql://postgres:1234@172.17.0.1:5432/thepointsaver
+        # SECRET_KEY: khoidang
+        # EXPIRES_IN: 3y
+        # CLOUD_NAME: daa7olre0
+        # CLOUD_API_KEY: 389784277328218
+        # CLOUD_API_SECRET: _1fH8rpAELXQx6L_H0zB4ntxkeM
+        run: |
+          whoami
+          ls
+          EOF
+      # run: |
+      #   # SSH into VPS to extract and deploy
+      #   sshpass -p $PASS ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
+      #     cd /home/$VPS_USER
+      #    # Clone the private repository using the PAT
+      #     git clone https://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@github.com/khoidang2110/thepointsaver_be.git tps_be || (cd tps_be && git pull)
+      #     cd tps_be || exit
+      #     docker stop tps_nest || true
+      #     docker rm tps_nest || true
+      #     docker rmi -f tps_be || true  
+      #     docker build -t tps_be .
+      #     # docker - d chạy nodejs ngầm ko chạy lên terminal
+      #     docker run --restart=always -d -p 8083:8083 --name tps_nest tps_be
+      #      # Clean up by removing the cloned repository files
+      #     cd ..
+      #     rm -rf tps_be
+      #   EOF
