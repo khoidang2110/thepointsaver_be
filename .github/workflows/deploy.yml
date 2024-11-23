@@ -33,6 +33,7 @@ jobs:
         # CLOUD_API_SECRET: _1fH8rpAELXQx6L_H0zB4ntxkeM
         
       run: |
+        env
         # SSH into VPS to extract and deploy
         sshpass -p $PASS ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
           cd /home/$VPS_USER
