@@ -31,7 +31,7 @@ jobs:
         # CLOUD_NAME: daa7olre0
         # CLOUD_API_KEY: 389784277328218
         # CLOUD_API_SECRET: _1fH8rpAELXQx6L_H0zB4ntxkeM
-        run: |
+      run: |
           whoami
           ls
           EOF
