@@ -16,12 +16,29 @@ export class AuthController {
   @Post('/login')
   // Use @Body to capture the email and password in the request body
   @ApiBody({ description: 'Thong tin dang nhap', type: loginDTO })
-  async login(@Body() body: { email: string; password: string }, @Res() response) {
+  async login(
+    @Body() body: { email: string; password: string },
+    @Res() response
+  ) {
     try {
-      const data = await this.authService.login(body.email, body.password);
-      response.status(200).json(data);
+      const { email, password } = body;
+  
+      if (!email || !password) {
+        return response.status(400).json({
+          status: 400,
+          message: 'Email and password are required',
+        });
+      }
+  
+      const data = await this.authService.login(email, password);
+      return response.status(200).json(data);
     } catch (error) {
-      response.status(500).json({ status: 500, message: error.message });
+      // Phân loại lỗi chi tiết
+      const status = error.status || 500;
+      return response.status(status).json({
+        status,
+        message: error.message || 'Internal server error',
+      });
     }
   }
 

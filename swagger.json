@@ -15,9 +15,9 @@
         ]
       }
     },
-    "/users": {
-      "post": {
-        "operationId": "UsersController_create",
+    "/users/update-user": {
+      "put": {
+        "operationId": "UsersController_updateUser",
         "parameters": [
           {
             "name": "auth_token",
@@ -31,115 +31,7 @@
         ],
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": [
-          "USER"
-        ]
-      },
-      "get": {
-        "operationId": "UsersController_getListUser",
-        "parameters": [
-          {
-            "name": "auth_token",
-            "in": "header",
-            "description": "Token xác thực của người dùng",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": [
-          "USER"
-        ]
-      }
-    },
-    "/users/{id}": {
-      "get": {
-        "operationId": "UsersController_findOne",
-        "parameters": [
-          {
-            "name": "auth_token",
-            "in": "header",
-            "description": "Token xác thực của người dùng",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": [
-          "USER"
-        ]
-      },
-      "patch": {
-        "operationId": "UsersController_update",
-        "parameters": [
-          {
-            "name": "auth_token",
-            "in": "header",
-            "description": "Token xác thực của người dùng",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
+          "description": "Thong tin cap nhat",
           "content": {
             "application/json": {
               "schema": {
@@ -159,42 +51,7 @@
           }
         ],
         "tags": [
-          "USER"
-        ]
-      },
-      "delete": {
-        "operationId": "UsersController_remove",
-        "parameters": [
-          {
-            "name": "auth_token",
-            "in": "header",
-            "description": "Token xác thực của người dùng",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "tags": [
-          "USER"
+          "User"
         ]
       }
     },
@@ -223,7 +80,93 @@
           }
         ],
         "tags": [
-          "USER"
+          "User"
+        ]
+      }
+    },
+    "/users/remove-user/{id}": {
+      "delete": {
+        "operationId": "UsersController_deleteUser",
+        "parameters": [
+          {
+            "name": "auth_token",
+            "in": "header",
+            "description": "Token xác thực của người dùng",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user_id",
+            "required": false,
+            "in": "path",
+            "description": "remove user id by ADMIN",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/users/get-user-list/{page}/{size}/{key}": {
+      "get": {
+        "operationId": "UsersController_getListUserPagination",
+        "parameters": [
+          {
+            "name": "auth_token",
+            "in": "header",
+            "description": "Token xác thực của người dùng",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "required": false,
+            "in": "path",
+            "description": "Search",
+            "schema": {}
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "path",
+            "description": "item per page",
+            "schema": {}
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "path",
+            "description": "page number",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "User"
         ]
       }
     },
@@ -383,6 +326,66 @@
       }
     },
     "schemas": {
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "user_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "zip": {
+            "type": "number"
+          },
+          "country": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "user_name",
+          "phone",
+          "password",
+          "address",
+          "city",
+          "state",
+          "zip",
+          "country"
+        ]
+      },
+      "loginDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
       "CreateUserDto": {
         "type": "object",
         "properties": {
@@ -424,55 +427,6 @@
           "state",
           "zip",
           "country"
-        ]
-      },
-      "UpdateUserDto": {
-        "type": "object",
-        "properties": {
-          "user_name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "city": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          },
-          "zip": {
-            "type": "number"
-          },
-          "country": {
-            "type": "string"
-          }
-        }
-      },
-      "loginDTO": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "email"
-          },
-          "password": {
-            "type": "string",
-            "description": "password"
-          }
-        },
-        "required": [
-          "email",
-          "password"
         ]
       }
     }

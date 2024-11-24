@@ -17,36 +17,38 @@ export class AuthService {
 
     async login(email: string, password: string): Promise<any> {
       try {
-        // B1: Kiểm tra email có tồn tại trong DB hay không
+        if (!email || !password) {
+          throw new HttpException('Email and password are required', HttpStatus.BAD_REQUEST);
+        }
+    
+        // B1: Kiểm tra email có tồn tại
         const checkUser = await this.prismaService.users.findFirst({
-          where: {
-            email: email,
-          },
+          where: { email: email },
         });
     
         if (!checkUser) {
-          // Trả về lỗi 400 nếu user không tồn tại
-          console.log('case no mail')
-          throw new HttpException('User does not exist', HttpStatus.BAD_REQUEST);
-          
+          throw new HttpException('Invalid email', HttpStatus.FORBIDDEN);
         }
     
-        // Nếu user tồn tại trong DB => kiểm tra password
+        // B2: Kiểm tra trạng thái is_blocked 
+        if (checkUser.is_blocked) {
+          throw new HttpException('User account is blocked', HttpStatus.FORBIDDEN);
+        }
+    
+        // B3: Kiểm tra mật khẩu
         const isCorrectPass = bcrypt.compareSync(password, checkUser.password);
     
         if (!isCorrectPass) {
-          // Trả về lỗi 401 nếu password không khớp
-          throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
+          throw new HttpException('Invalid password', HttpStatus.UNAUTHORIZED);
         }
     
-        // Nếu password khớp => tạo token
+        // B4: Tạo token
         const payload = {
           user_id: checkUser.user_id,
           user_name: checkUser.user_name,
           email: checkUser.email,
           phone: checkUser.phone,
           user_role: checkUser.user_role,
-          is_blocked: checkUser.is_blocked,
         };
     
         const token = this.jwtService.sign(payload, {
@@ -60,10 +62,15 @@ export class AuthService {
           data: { token },
         };
       } catch (error) {
-        // Bắt tất cả lỗi khác nếu có
-        throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+        // Thêm log chi tiết để hỗ trợ debug
+        console.error('Error during login:', error);
+        throw new HttpException(
+          error.message || 'Internal server error',
+          error.status || HttpStatus.INTERNAL_SERVER_ERROR
+        );
       }
     }
+    
     
       async signUp(body: CreateUserDto): Promise<any> {
         function getRandomInt(min, max) {
@@ -72,17 +79,17 @@ export class AuthService {
           return Math.floor(Math.random() * (max - min + 1)) + min;
         }
         try {
-          const exitingUser = await this.prismaService.users.findFirst({
-            where: {
-              user_name: body.user_name,
-            },
-          });
-          if (exitingUser) {
-            return {
-              status: 409,
-              message: 'User already exists',
-            };
-          }
+          // const exitingUser = await this.prismaService.users.findFirst({
+          //   where: {
+          //     user_name: body.user_name,
+          //   },
+          // });
+          // if (exitingUser) {
+          //   return {
+          //     status: 409,
+          //     message: 'User already exists',
+          //   };
+          // }
           const exitingEmail = await this.prismaService.users.findFirst({
             where: {
               email: body.email,
